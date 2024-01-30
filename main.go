@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"runtime"
 	"syscall"
 
 	"golang.org/x/sync/errgroup"
@@ -47,6 +48,7 @@ func main() {
 	defer stop()
 
 	eg, ctx := errgroup.WithContext(ctx)
+	eg.SetLimit(runtime.GOMAXPROCS(0)) // 设置 goroutine 数量为 CPU 核心数
 	input := getInputStream(ctx, eg, f)
 	mapped := mapper(ctx, eg, input, mapFn)
 	sorted := sorter(ctx, eg, mapped)
@@ -54,7 +56,9 @@ func main() {
 
 	eg.Go(func() error {
 		for wc := range reduced {
-			_, _ = fmt.Printf("%-15s%4d\n", wc.word, wc.count)
+			if _, err := fmt.Printf("%-15s%4d\n", wc.word, wc.count); err != nil {
+				return err
+			}
 		}
 		return nil
 	})
