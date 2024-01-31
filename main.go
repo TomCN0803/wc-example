@@ -23,7 +23,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&inputFile, "f", "article.txt", "specify the input file")
+	flag.StringVar(&inputFile, "f", "", "specify the input file")
 	flag.BoolVar(&debug, "debug", false, "enable debug mode")
 	flag.Parse()
 }
