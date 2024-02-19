@@ -9,6 +9,7 @@ func (w *wordCountHeap) Len() int {
 func (w *wordCountHeap) Less(i int, j int) bool {
 	return (*w)[i].word < (*w)[j].word
 }
+
 func (w *wordCountHeap) Swap(i int, j int) {
 	(*w)[i], (*w)[j] = (*w)[j], (*w)[i]
 }
